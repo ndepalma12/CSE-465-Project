@@ -96,6 +96,7 @@ foreach (glob("*.*") as $filename)	//Steps through folder
 	{
 		if(array_key_exists($num, $array))	//Checks if key in array exists
 		{
+			//One more If-Statement here to determine if file should be displayed based on SQL Queries.  Will encapsulate the below echo
 			echo "<a href=/$loc/$filename download=$filename>$filename</a><br>";	//Displays download link for file
 		}
 		$num = $num+1;	//Steps through the files in the folder
