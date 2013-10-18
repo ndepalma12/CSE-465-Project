@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html>
-<body 
-bgcolor = "#00FFFF">
+<body bgcolor = "#00FFFF">
 
 <center><h1>DEPARTMENTS</h1>
 <form method="post">
@@ -14,11 +13,10 @@ bgcolor = "#00FFFF">
 
 
 
-
 </center>
 
 <?php
-session_start();	//Starts the session so that the file path can be carries across php pages
+session_start();	//Starts the session so that the file path can be carries across php pages <img src="http://i.imgur.com/F1S7mfY.gif" alt="DB90">
 $num = 2;	//Used in file_disp() to step through folder contents
 
 //The following if-statements determine which button is clicked and which files to display
@@ -101,33 +99,22 @@ foreach (glob("*.*") as $filename)	//Steps through folder
 			echo "<a href=/$loc/$filename download=$filename>$filename</a><br>";	//Displays download link for file
 		}
 		$num = $num+1;	//Steps through the files in the folder
+
 	}	
 }
 
 
-
-
 function upload()
 {
+
 echo <<< EOT
-<form action="upload_files.php" method="post"
-enctype="multipart/form-data">
-<label for="file">Please Upload File:    </label>
-<input type="file" name="file" id="file"><br>
-<input type="submit" name="submit" value="Submit">
+<form action="upload_files.php" method="post">
+<input type="submit" name="Upload" value="Upload a File">
 </form>
 EOT;
+
 }
 ?>
 
 </body>
 </html>
-
-
-
-
-
-
-
-
-
