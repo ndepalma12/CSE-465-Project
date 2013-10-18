@@ -2,17 +2,6 @@
 
 <h2> FILE ATTRIBUTES </h2>	
 <form method="post" enctype="multipart/form-data">
-DEPARTMENT:	
-<select name="Dept">
-	<option value="NA">...</option>
-	<option value="Development">Development</option>
-	<option value="Sales">Sales</option>
-	<option value="Human Resources">Human Resources</option>
-	<option value="Accounting">Accounting</option>
-	<option value="Information Technology">Information Technology</option>		
-</select>
-<br>
-
 ROLE:
 <select name="Role">
 	<option value="NA">...</option>
@@ -60,15 +49,14 @@ $loc = $_SESSION['loc'];	//Establish location path variable
 
 
 //When Upload is selected and all the attributes are selected
-if(isset($_POST['Upload'])&&isset($_POST['Dept'])&&isset($_POST['Sec'])&&isset($_POST['Role'])&&isset($_POST['Ctzn']))
+if(isset($_POST['Upload'])&&isset($_POST['Sec'])&&isset($_POST['Role'])&&isset($_POST['Ctzn']))
 	{
-		if($_POST['Dept']=="NA"||$_POST['Sec']=="NA"||$_POST['Role']=="NA"||$_POST['Ctzn']=="NA")	//Make sure NA isn't chosen
+		if($_POST['Sec']=="NA"||$_POST['Role']=="NA"||$_POST['Ctzn']=="NA")	//Make sure NA isn't chosen
 			echo "Choose an attribute.";
 		else
 		{
 			//These echo lines are just unit testing
 			//We will replace them with SQL Queries setting values in the table using $_POST
-			echo $_POST['Dept']."<br>";
 			echo $_POST['Sec']."<br>";
 			echo $_POST['Role']."<br>";
 			echo $_POST['Ctzn']."<br>";
