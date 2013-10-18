@@ -38,11 +38,12 @@ SECURITY LEVEL:
 CITIZENSHIP:
 <select name="Ctzn">
 	<option value="NA">...</option>
-	<option value="1">Canadian</option>
-	<option value="2">French</option>
-	<option value="3">Mexican</option>
-	<option value="4">Chinese</option>
-	<option value="5">American</option>
+	<option value="Canadian">Canadian</option>
+	<option value="French">French</option>
+	<option value="Mexican">Mexican</option>
+	<option value="Chinese">Chinese</option>
+	<option value="Japanese">Japanese</option>
+	<option value="American">American</option>
 </select>
 <br>
 
