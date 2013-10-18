@@ -119,4 +119,5 @@ function fileUp($loc)
 	}
 }
 ?>
+<br>
 <a href="dept.php">DEPARTMENTS</a>
