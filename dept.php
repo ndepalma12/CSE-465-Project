@@ -30,12 +30,15 @@ if(isset($_POST['Dev']))//Determines button action and files to display
 	$loc = $_SESSION['loc'];	//Sets location variable
 	$array = scandir(getcwd());	//Gets contents of folder
 	file_disp($num, $array, $loc);	//Displays files for download
+	$_SESSION['dept']='dev';
 	upload();	//Displays upload link
 }
 
 if(isset($_POST['Sales']))
 {   
-	$_SESSION['write'] = FALSE;	//User unable to overwrite files.  Test purposes only, not to be used in final project.
+	$_SESSION['dept']='sales';
+
+	$_SESSION['write'] = TRUE;	//User unable to overwrite files.  Test purposes only, not to be used in final project.
 	$_SESSION['loc'] = "Company/SalesFiles";	//Location of files
 	echo "This is the Sales team <br>";
 	
@@ -48,9 +51,12 @@ if(isset($_POST['Sales']))
 
 if(isset($_POST['HR']))
 {   
+	$_SESSION['dept']='hr';
+
 	$_SESSION['loc'] = "Company/HRFiles";	//Location of files
 	echo "This is the Human Resources team <br>";
 	
+	$_SESSION['write'] = TRUE;
 	chdir($_SESSION['loc']);	//Changes to folder with files
 	$loc = $_SESSION['loc'];	//Sets location variable
 	$array = scandir(getcwd());	//Gets contents of folder
@@ -60,9 +66,12 @@ if(isset($_POST['HR']))
 
 if(isset($_POST['Acc']))
 {   
+	$_SESSION['dept']='acc';
+
 	$_SESSION['loc'] = "Company/AccFiles";	//Location of files
 	echo "This is the Accounting team <br>";
 	
+	$_SESSION['write'] = TRUE;
 	chdir($_SESSION['loc']);	//Changes to folder with files
 	$loc = $_SESSION['loc'];	//Sets location variable
 	$array = scandir(getcwd());	//Gets contents of folder
@@ -72,9 +81,12 @@ if(isset($_POST['Acc']))
 
 if(isset($_POST['IT']))
 {   
+	$_SESSION['dept']='it';
+
 	$_SESSION['loc'] = "Company/ITFiles";	//Location of files
 	echo "This is the Information Technology team <br>";
 	
+	$_SESSION['write'] = TRUE;
 	chdir($_SESSION['loc']);	//Changes to folder with files
 	$loc = $_SESSION['loc'];	//Sets location variable
 	$array = scandir(getcwd());	//Gets contents of folder

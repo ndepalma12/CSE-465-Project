@@ -49,22 +49,25 @@ $loc = $_SESSION['loc'];	//Establish location path variable
 
 
 //When Upload is selected and all the attributes are selected
-if(isset($_POST['Upload'])&&isset($_POST['Sec'])&&isset($_POST['Role'])&&isset($_POST['Ctzn']))
+if(isset($_SESSION['dept'])&&isset($_POST['Upload'])&&isset($_POST['Sec'])&&isset($_POST['Role'])&&isset($_POST['Ctzn']))
+{
+	if($_POST['Sec']=="NA"||$_POST['Role']=="NA"||$_POST['Ctzn']=="NA")	//Make sure NA isn't chosen
+		echo "Choose an attribute.";
+	else
 	{
-		if($_POST['Sec']=="NA"||$_POST['Role']=="NA"||$_POST['Ctzn']=="NA")	//Make sure NA isn't chosen
-			echo "Choose an attribute.";
-		else
-		{
-			//These echo lines are just unit testing
-			//We will replace them with SQL Queries setting values in the table using $_POST
-			echo $_POST['Sec']."<br>";
-			echo $_POST['Role']."<br>";
-			echo $_POST['Ctzn']."<br>";
-			echo $loc."<br>";
-			fileUp($loc);	//Call the fileUp function passing the file path
-			session_destroy();	//Destroy the session
-		}
+		//These echo lines are just unit testing
+		//We will replace them with SQL Queries setting values in the table using $_POST
+		echo $_POST['Sec']."<br>";
+		echo $_POST['Role']."<br>";
+		echo $_POST['Ctzn']."<br>";
+		echo $loc."<br>";
+		fileUp($loc);	//Call the fileUp function passing the file path
+		session_destroy();	//Destroy the session
 	}
+}
+else {
+	echo "Something is wrong";
+}
 
 
 /*****************************************************************************************/
@@ -91,21 +94,75 @@ function fileUp($loc)
 			echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
 			echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
 
-		if ((file_exists("$loc/" . $_FILES["file"]["name"])) && ($_SESSION['write'] == FALSE))	//If the file can be overwritten.  Replace with SQL Query
-		  {
-			echo $_FILES["file"]["name"] . " already exists. " . "<br>";
-		  }
+		if (file_exists("$loc/" . $_FILES["file"]["name"])) // If file already exists:
+		{
+			if ($_SESSION['write'] == FALSE) {	//If the file can not be overwritten.  Replace with SQL Query
+				echo $_FILES["file"]["name"] . " already exists. " . "<br>";				
+			}
+			else {
+				$con=mysqli_connect('localhost', '', '', 'cse465');
+				// Check connection
+				if (mysqli_connect_errno())
+				{
+					echo "Failed to connect to MySQL: " . mysqli_connect_error();
+				}
+				else {	// Connection is good
+
+					$sql="UPDATE File SET Role = '$_POST[Role]', Security = '$_POST[Sec]', Citizenship = '$_POST[Ctzn]'
+						WHERE Filename = '$_SESSION[filename]' and Department = '$_SESSION[dept]'";
+
+					if (!mysqli_query($con,$sql))
+					{
+						die('Error: ' . mysqli_error($con));
+					}
+
+					mysqli_close($con);
+
+					echo "Stored in: " . "$loc/" . $_FILES["file"]["name"] . "<br>";	//Print out file location
+				}
+			}
+			
+		}
 		else
-		  {
+		{
 			move_uploaded_file($_FILES["file"]["tmp_name"],"$loc/" . $_FILES["file"]["name"]);	//Actually upload the file
-			echo "Stored in: " . "$loc/" . $_FILES["file"]["name"] . "<br>";	//Print out file location
-		  }
+
+			// SQL: insert into File Values (filename, dept, seciruty, citizenship)
+			echo $_FILES["file"]["name"]. "<br>";
+			$_SESSION["filename"] = $_FILES["file"]["name"];
+			echo $_SESSION["dept"] . "<br>";
+			echo $_POST["Sec"] . "<br>";
+			echo $_POST["Role"]."<br>";
+			echo $_POST["Ctzn"]."<br>";
+
+			$con=mysqli_connect('localhost', '', '', 'cse465');
+			// Check connection
+			if (mysqli_connect_errno())
+			{
+				echo "Failed to connect to MySQL: " . mysqli_connect_error();
+			}
+			else {	// Connection is good
+
+				$sql="INSERT INTO File (Filename, Department, Role, Security, Citizenship)
+					VALUES ('$_SESSION[filename]', '$_SESSION[dept]',
+						'$_POST[Role]', '$_POST[Sec]', '$_POST[Ctzn]')";
+
+				if (!mysqli_query($con,$sql))
+				{
+					die('Error: ' . mysqli_error($con));
+				}
+
+				mysqli_close($con);
+
+				echo "Stored in: " . "$loc/" . $_FILES["file"]["name"] . "<br>";	//Print out file location
+			}
 		}
 	}
-	else
-	{
-		echo "Invalid file";
-	}
+}
+else
+{
+	echo "Invalid file";
+}
 }
 ?>
 <br>
