@@ -47,6 +47,8 @@ CITIZENSHIP:
 session_start();	//Start session to get location path
 $loc = $_SESSION['loc'];	//Establish location path variable
 
+if($_SESSION['login_cred'] == 1)
+{
 
 //When Upload is selected and all the attributes are selected
 if(isset($_SESSION['dept'])&&isset($_POST['Upload'])&&isset($_POST['Sec'])&&isset($_POST['Role'])&&isset($_POST['Ctzn']))
@@ -55,20 +57,12 @@ if(isset($_SESSION['dept'])&&isset($_POST['Upload'])&&isset($_POST['Sec'])&&isse
 		echo "Choose an attribute.";
 	else
 	{
-		//These echo lines are just unit testing
-		//We will replace them with SQL Queries setting values in the table using $_POST
-		echo $_POST['Sec']."<br>";
-		echo $_POST['Role']."<br>";
-		echo $_POST['Ctzn']."<br>";
-		echo $loc."<br>";
 		fileUp($loc);	//Call the fileUp function passing the file path
-		session_destroy();	//Destroy the session
 	}
 }
-else {
-	echo "Something is wrong";
 }
-
+else
+	header('Location: entry.php');
 
 /*****************************************************************************************/
 /****************************************FUNCTIONS****************************************/
@@ -92,10 +86,12 @@ function fileUp($loc)
 			echo "Upload: " . $_FILES["file"]["name"] . "<br>";
 			echo "Type: " . $_FILES["file"]["type"] . "<br>";
 			echo "Size: " . ($_FILES["file"]["size"] / 1024) . " kB<br>";
-			echo "Temp file: " . $_FILES["file"]["tmp_name"] . "<br>";
+			
 
 		if (file_exists("$loc/" . $_FILES["file"]["name"])) // If file already exists:
 		{
+
+
 			if ($_SESSION['write'] == FALSE) {	//If the file can not be overwritten.  Replace with SQL Query
 				echo $_FILES["file"]["name"] . " already exists. " . "<br>";				
 			}
@@ -128,13 +124,9 @@ function fileUp($loc)
 			move_uploaded_file($_FILES["file"]["tmp_name"],"$loc/" . $_FILES["file"]["name"]);	//Actually upload the file
 
 			// SQL: insert into File Values (filename, dept, seciruty, citizenship)
-			echo $_FILES["file"]["name"]. "<br>";
+			
 			$_SESSION["filename"] = $_FILES["file"]["name"];
-			echo $_SESSION["dept"] . "<br>";
-			echo $_POST["Sec"] . "<br>";
-			echo $_POST["Role"]."<br>";
-			echo $_POST["Ctzn"]."<br>";
-
+			
 			$con=mysqli_connect('localhost', '', '', 'cse465');
 			// Check connection
 			if (mysqli_connect_errno())
@@ -153,8 +145,6 @@ function fileUp($loc)
 				}
 
 				mysqli_close($con);
-
-				echo "Stored in: " . "$loc/" . $_FILES["file"]["name"] . "<br>";	//Print out file location
 			}
 		}
 	}
